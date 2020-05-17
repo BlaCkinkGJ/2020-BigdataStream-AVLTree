@@ -9,7 +9,7 @@
 
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
-#if 1
+#if 0
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #endif
 

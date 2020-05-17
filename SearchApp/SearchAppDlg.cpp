@@ -244,33 +244,35 @@ void CSearchAppDlg::DrawScreen()
 		int key = _key.first;
 		int x = _key.second.second;
 		int y = _key.second.first;
-		const int xlen = 30;
+		const int xlen = 40;
 		const int ylen = 30;
 		const int xsize = xlen;
 		const int ysize = ylen - 10;
-		temp.Format(_T("%d"), key);
+
 		x = xlen * x;
 		y = ylen * y;
+
 		CRect bound(x - 1, y - 1, x + xsize+1, y + ysize+1);
 		CRect textLocation(x, y, x + xlen, y + ylen);
 		AvlNode<int>* _node = tree.search(key);
 		int _leftKey = -1, _rightKey = -1;
+
+		temp.Format(_T("%d"), key);
 
 		if (_node == nullptr) {
 			continue;
 		}
 
 		if (_node->getLeftChild())
-			_leftKey = tree.search(_node->getLeftChild()->getKey())->getKey();
+			_leftKey = _node->getLeftChild()->getKey();
 		if (_node->getRightChild())
-			_rightKey = tree.search(_node->getRightChild()->getKey())->getKey();
+			_rightKey = _node->getRightChild()->getKey();
 
 		pDC->Rectangle(&bound);
 		pDC->DrawText(temp, &textLocation, DT_CENTER);
 
 		if (_leftKey != -1) {
 			int _key = _leftKey;
-			int key = keys.find(_key)->first;
 			int fromX = x;
 			int fromY = y + ysize + 1;
 			int toX = xlen * keys.find(_key)->second.second + (xsize + 1) - 1;
@@ -284,7 +286,6 @@ void CSearchAppDlg::DrawScreen()
 		}
 		if (_rightKey != -1) {
 			int _key = _rightKey;
-			int key = keys.find(_key)->first;
 			int fromX = x + xsize + 1;
 			int fromY = y + ysize + 1;
 			int toX = xlen * keys.find(_key)->second.second - 1;
@@ -296,7 +297,7 @@ void CSearchAppDlg::DrawScreen()
 			pDC->Ellipse(toX - len, toY - len, toX + len, toY + len);
 			// cout << fromX << ", " << fromY << " ==> " << toX << ", " << toY << endl;
 		}
-
+		UpdateWindow();
 	}
 	m_pictureBox.ReleaseDC(pDC);
 	UpdateWindow();

@@ -26,6 +26,7 @@ public:
 	AvlNode* getLeftChild(void) { return this->LeftChild; }
 	AvlNode* getRightChild(void) { return this->RightChild; }
 	KeyType getKey(void) { return this->data.key; }
+	int getBf(void) { return this->bf; }
 private:
 	Element<KeyType> data;
 	AvlNode* LeftChild, * RightChild;
@@ -52,12 +53,13 @@ public:
 	void destroy();
 	void print();
 	void getTreePoints(std::map<KeyType, pair<KeyType, KeyType>>& keys, enum class Order order) { int h = 0; cout << "\n"; root->treeprint(keys, 1, h, order); }
+	int height(AvlNode<KeyType>* tree);
 private:
 	AvlNode<KeyType>* root;
 	void ListOrder(AvlNode<KeyType>* head);
 	void preOrder(AvlNode<KeyType>* head);
 	void inOrder(AvlNode<KeyType>* head);
-	int height(AvlNode<KeyType>* tree);
+	int height(AvlNode<KeyType>* tree, int _height);
 	AvlNode<KeyType>* search(AvlNode<KeyType>* x, KeyType data) const;
 	AvlNode<KeyType>* minimum(AvlNode<KeyType>* tree);
 	AvlNode<KeyType>* maximum(AvlNode<KeyType>* tree);

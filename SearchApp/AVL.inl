@@ -169,10 +169,25 @@ bool AVL<KeyType>::Insert(const Element<KeyType>& x)
 }
 
 template <class KeyType>
+int AVL<KeyType>::height(AvlNode<KeyType>* tree, int _height)
+{
+	int leftHeight = 0, rightHeight = 0;
+	if (tree) {
+		leftHeight = tree->LeftChild != NULL ? height(tree->LeftChild, _height) : 0;
+		rightHeight = tree->RightChild != NULL ? height(tree->RightChild, _height) : 0;
+		return 1 + max(leftHeight, rightHeight);
+	}
+	return _height;
+}
+
+template <class KeyType>
 int AVL<KeyType>::height(AvlNode<KeyType>* tree)
 {
-	if (tree != NULL)
-		return tree->bf;
+	int _height = 0;
+		if (tree != NULL) {
+			_height = height(tree, 0);
+			return _height;
+		}
 	return 0;
 }
 
@@ -287,7 +302,7 @@ AvlNode<KeyType>* AVL<KeyType>::Delete(AvlNode<KeyType>*& tree, AvlNode<KeyType>
 	if (z->data.key < tree->data.key)
 	{
 		tree->LeftChild = Delete(tree->LeftChild, z);
-		if (height(tree->RightChild) - height(tree->LeftChild) == 2)
+		if (abs(height(tree->RightChild) - height(tree->LeftChild)) >= 2)
 		{
 			AvlNode<KeyType>* r = tree->RightChild;
 			if (height(r->LeftChild) > height(r->RightChild))
@@ -299,7 +314,7 @@ AvlNode<KeyType>* AVL<KeyType>::Delete(AvlNode<KeyType>*& tree, AvlNode<KeyType>
 	else if (z->data.key > tree->data.key)
 	{
 		tree->RightChild = Delete(tree->RightChild, z);
-		if (height(tree->LeftChild) - height(tree->RightChild) == 2)
+		if (abs(height(tree->LeftChild) - height(tree->RightChild)) >= 2)
 		{
 			AvlNode<KeyType>* l = tree->LeftChild;
 			if (height(l->RightChild) > height(l->LeftChild))
@@ -315,12 +330,12 @@ AvlNode<KeyType>* AVL<KeyType>::Delete(AvlNode<KeyType>*& tree, AvlNode<KeyType>
 			if (height(tree->LeftChild) > height(tree->RightChild))
 			{
 				AvlNode<KeyType>* max = maximum(tree->LeftChild);
-				tree->data = max->data;
+				tree->data.key = max->data.key;
 				tree->LeftChild = Delete(tree->LeftChild, max);
 			}
 			else
 			{
-				AvlNode<KeyType>* min = maximum(tree->RightChild);
+				AvlNode<KeyType>* min = minimum(tree->RightChild);
 				tree->data.key = min->data.key;
 				tree->RightChild = Delete(tree->RightChild, min);
 			}
